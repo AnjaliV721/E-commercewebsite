@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Inventory</title>
+  </head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #3a373c;
+      color: #ccc;
+    }
+    h2 {
+      color: #28b1fb;
+      margin-bottom: 20px;
+    }
+    #logoutbtn {
+      display: flex; 
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #logout {
+        padding : 9px;
+        border-radius: 3px;
+        border:none;
+        margin-right: 15px;
+        background-color: #fb0707;
+        color: #efe3ff;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-size: 15px;
+    }
+    #logout:hover{
+        background-color: #3a373c;
+        color: #ded409;
+        border :2px solid #fd0505;
+        cursor : pointer;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width: 70%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 4px;
+    }
+    #addbtn button {
+      padding: 10px 20px;
+      margin: 20px 10px 10px 0px;
+      background-color: #8928ea;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #addbtn button:hover {
+      background-color: #5dfb01;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      color: #f3fb01;
+      font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid black;
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #3a373c;
+      padding: 20px;
+      width: 400px;
+      border: 1px solid black;
+      border-radius: 4px;
+    }
+    .close {
+      float: right;
+      cursor: pointer;
+    }
+    button[type="button"] {
+      padding: 10px 20px;
+      width: 75%;
+      background-color: #c800ff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button[type="button"]:hover {
+      background-color: #5dfb01;
+      color: #333;
+    }
+    .rembtm,
+    .updbtn {
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 100;
+      margin: 5px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .rembtm {
+      background-color: #fd0505;
+      color: #fffbfb;
+      transition: background-color 0.3s ease;
+
+    }
+    .updbtn {
+      background-color: #2cd42e;
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+
+    }
+    .rembtm:hover {
+      color: #f3f3ed;
+      background-color: #ac0000;
+    }
+
+    .updbtn:hover {
+      background-color: #318500;
+      color: #ffffff;
+      
+    }
+  </style>
+  <body>
+    <div id="logoutbtn">
+        <h2>ADMIN INVENTORY</h2>
+        <button type="submit" id="logout" onclick="Logout()">LOGOUT</button>
+    </div>
+    <div>
+      <label for="prod">Product</label>
+      <input type="text" id="prod" name="prod" required />
+      <label for="price">Price</label>
+      <input type="number" id="price" name="price" required />
+      <label for="stock">Stock</label>
+      <input type="number" id="stock" name="stock" required />
+      <label for="desc">Description</label>
+      <input type="text" id="desc" name="desc" required />
+      <label for="imageURL">Image URL</label>
+      <input type="text" id="imageURL" name="imageURL" required />
+      <div id="addbtn">
+        <button type="submit" id="addtoinv" onclick="AddData()">
+          ADD TO INVENTORY
+        </button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Item Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="prod-body"></tbody>
+      </table>
+    </div>
+    <div id="updateModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeUpdateModal()">&times;</span>
+        <h2>Update Product</h2>
+        <form id="updateForm">
+          <label for="updatedName">Name</label>
+          <input type="text" id="updatedName" name="updatedName" required />
+
+          <label for="updatedPrice">Price</label>
+          <input type="number" id="updatedPrice" name="updatedPrice" required />
+
+          <label for="updatedQuantity">Stock</label>
+          <input
+            type="number"
+            id="updatedQuantity"
+            name="updatedQuantity"
+            required
+          />
+
+          <label for="updatedDescription">Description</label>
+          <input
+            type="text"
+            id="updatedDescription"
+            name="updatedDescription"
+            required
+          />
+
+          <label for="updatedImageURL">Image URL</label>
+          <input
+            type="text"
+            id="updatedImageURL"
+            name="updatedImageURL"
+            required
+          />
+
+          <button type="button" id="updateButton">Update</button>
+        </form>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>

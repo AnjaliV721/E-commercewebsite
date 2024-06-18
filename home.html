@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="navbar">
+        <nav class="navbar-brand">URBAN UTOPIA</nav>
+        <div>
+            <button id="loginLogoutBtn">Login</button>
+            <button id="viewCartBtn">View Cart</button>
+        </div>
+    </div>
+
+    <div id="products" class="product-container"></div>
+    <div class="load-more">
+        <button id="loadMoreBtn">Load More ...</button>
+    </div>
+    <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            const loginLogoutBtn = document.getElementById('loginLogoutBtn');
+            const viewCartBtn = document.getElementById('viewCartBtn');
+            const itemsContainer = document.getElementById('products');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+            loginLogoutBtn.addEventListener('click', () => {
+                if (loginLogoutBtn.innerText === 'Login') {
+                    loginLogoutBtn.innerText = 'Logout';
+                    alert('Logged in!');
+                } else {
+                    loginLogoutBtn.innerText = 'Login';
+                    alert('Logged out!');
+                }
+            });
+
+            viewCartBtn.addEventListener('click', () => {
+                window.location.href = 'cart.html';
+            });
+
+            const data = JSON.parse(localStorage.getItem("Products")) || [];
+            let itemsToShow = 5;
+
+            function displayItems() {
+                itemsContainer.innerHTML = '';
+                for (let i = 0; i < itemsToShow && i < data.length; i++) {
+                    const item = data[i];
+                    const card = document.createElement('div');
+                    card.classList.add('productCardOuter');
+
+                    const prodimage = document.createElement('img');
+                    prodimage.classList.add('productImage');
+                    prodimage.src = item.purl;
+                    card.append(prodimage);
+
+                    const cardtext = document.createElement('p');
+                    cardtext.innerHTML = `${item.pname}<br>${item.pprice}<br>${item.pdesc}`;
+                    cardtext.classList.add('product-card');
+                    card.append(cardtext);
+
+                    const addcartbtn = document.createElement('button');
+                    addcartbtn.classList.add('add-cart');
+                    addcartbtn.innerHTML = "Add To Cart";
+                    addcartbtn.addEventListener('click', () => addToCart(item));
+                    card.append(addcartbtn);
+
+                    itemsContainer.append(card);
+                }
+            }
+
+            function addToCart(item) {
+                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                const existingItem = cartItems.find(cartItem => cartItem.pId === item.pId);
+
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    item.quantity = 1;
+                    cartItems.push(item);
+                }
+
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                alert(`${item.pname} added to cart`);
+            }
+
+            loadMoreBtn.addEventListener('click', () => {
+                itemsToShow += 5;
+                if (itemsToShow >= data.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+                displayItems();
+            });
+
+            displayItems();
+        });
+    </script>
+    <script src="index.js"></script>
+</body>
+</html>

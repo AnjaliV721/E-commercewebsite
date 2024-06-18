@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body{
+        background-color: rgb(92, 93, 92);
+    }
+    .container{
+        box-shadow: 2px 2px 4px 4px cornsilk;
+    }
+</style>
+<body>
+    <div class="con">
+    <div class="container">
+        <h2>WELCOME BACK!</h2>
+        <form id="grp">
+            <label for="email">Username</label>
+            <input type="email" id="email" name="email" required>
+            <label for="pswrd">Password</label>
+            <input type="password" id="pswrd" name="pswrd" required>
+            <button type="submit" onclick="Login()">Sign In</button>  
+        </form>
+        <p>Don't have an account ? <button class="register" onclick="window.location.href='registration.html'">Create an Account</button></p>
+    </div>
+</div>
+    <script src="index.js"></script>
+</body>
+</html>
